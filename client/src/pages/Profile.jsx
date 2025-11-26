@@ -48,9 +48,9 @@ const Profile = () => {
         name: user.name || '',
         studentId: user.id?.slice(-6) || '',
         gender: user.gender || '',
-        class: '',
+        class: user.class || '',
         dob: user.dob || '',
-        support: '',
+        support: user.support || '',
         email: user.email || '',
         expertise: user.tutorProfile?.expertise?.join(', ') || '',
         phone: user.phone || '',
@@ -94,7 +94,9 @@ const Profile = () => {
         phone: formData.phone,
         gender: formData.gender,
         dob: formData.dob,
-        faculty: formData.faculty
+        faculty: formData.faculty,
+        class: formData.class,
+        support: formData.support
       })
       // If server returned updated user, update context + localStorage so UI reflects changes immediately
       if (res && res.data) {
@@ -312,7 +314,7 @@ const Profile = () => {
                   name="studentId"
                   value={formData.studentId}
                   onChange={handleChange}
-                  disabled={!isEditing}
+                  disabled={true}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-600"
                 />
               </div>
