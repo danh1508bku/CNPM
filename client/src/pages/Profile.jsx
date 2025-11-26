@@ -52,7 +52,7 @@ const Profile = () => {
         dob: user.dob || '',
         support: user.support || '',
         email: user.email || '',
-        expertise: user.tutorProfile?.expertise?.join(', ') || '',
+        expertise: user.expertise || user.tutorProfile?.expertise?.join(', ') || '',
         phone: user.phone || '',
         faculty: user.faculty || ''
       }
@@ -96,7 +96,8 @@ const Profile = () => {
         dob: formData.dob,
         faculty: formData.faculty,
         class: formData.class,
-        support: formData.support
+        support: formData.support,
+        expertise: formData.expertise
       })
       // If server returned updated user, update context + localStorage so UI reflects changes immediately
       if (res && res.data) {
