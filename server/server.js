@@ -84,7 +84,23 @@ const authorize = (...roles) => {
 app.post('/api/auth/register', async (req, res) => {
   try {
     const { email, password, name, role, phone, gender, dob, faculty } = req.body;
-    
+
+    // Validate email format
+    if (!email || !email.includes('@')) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_EMAIL', message: 'Email phải có định dạng hợp lệ (chứa @)' }
+      });
+    }
+
+    // Validate phone format (10-11 digits)
+    if (!phone || !/^\d{10,11}$/.test(phone)) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_PHONE', message: 'Số điện thoại phải là dãy 10-11 chữ số' }
+      });
+    }
+
     const usersData = await readJSON('users.json');
     if (!usersData) {
       return res.status(500).json({
@@ -92,7 +108,7 @@ app.post('/api/auth/register', async (req, res) => {
         error: { code: 'SERVER_ERROR', message: 'Không thể đọc dữ liệu' }
       });
     }
-    
+
     // Check email exists
     const existingUser = usersData.users.find(u => u.email === email);
     if (existingUser) {
@@ -226,8 +242,17 @@ app.get('/api/auth/me', authenticate, async (req, res) => {
 app.patch('/api/users/me', authenticate, async (req, res) => {
   try {
     const updates = req.body;
+
+    // Validate phone format if phone is being updated
+    if (updates.phone && !/^\d{10,11}$/.test(updates.phone)) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_PHONE', message: 'Số điện thoại phải là dãy 10-11 chữ số' }
+      });
+    }
+
     const usersData = await readJSON('users.json');
-    
+
     const userIndex = usersData.users.findIndex(u => u.id === req.user.userId);
     if (userIndex === -1) {
       return res.status(404).json({
@@ -235,7 +260,7 @@ app.patch('/api/users/me', authenticate, async (req, res) => {
         error: { code: 'USER_NOT_FOUND', message: 'Không tìm thấy người dùng' }
       });
     }
-    
+
     // Don't allow role change
     delete updates.role;
     delete updates.id;

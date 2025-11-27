@@ -26,14 +26,28 @@ const Register = () => {
 
   const validate = () => {
     const newErrors = {}
-    if (!formData.email) newErrors.email = 'Email là bắt buộc'
+
+    // Email validation
+    if (!formData.email) {
+      newErrors.email = 'Email là bắt buộc'
+    } else if (!formData.email.includes('@')) {
+      newErrors.email = 'Email phải có định dạng hợp lệ (chứa @)'
+    }
+
     if (!formData.password) newErrors.password = 'Mật khẩu là bắt buộc'
     if (formData.password.length < 6) newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự'
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Mật khẩu không khớp'
     }
     if (!formData.name) newErrors.name = 'Họ tên là bắt buộc'
-    if (!formData.phone) newErrors.phone = 'Số điện thoại là bắt buộc'
+
+    // Phone validation
+    if (!formData.phone) {
+      newErrors.phone = 'Số điện thoại là bắt buộc'
+    } else if (!/^\d{10,11}$/.test(formData.phone)) {
+      newErrors.phone = 'Số điện thoại phải là dãy 10-11 chữ số'
+    }
+
     if (!formData.dob) newErrors.dob = 'Ngày sinh là bắt buộc'
     if (!formData.faculty) newErrors.faculty = 'Khoa là bắt buộc'
     return newErrors

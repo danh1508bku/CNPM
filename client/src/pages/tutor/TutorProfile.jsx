@@ -54,7 +54,19 @@ const TutorProfile = () => {
     setIsEditing(true)
   }
 
+  const validateProfile = () => {
+    // Phone validation
+    if (formData.phone && !/^\d{10,11}$/.test(formData.phone)) {
+      toast.error('Số điện thoại phải là dãy 10-11 chữ số')
+      return false
+    }
+    return true
+  }
+
   const handleSave = () => {
+    if (!validateProfile()) {
+      return
+    }
     setShowConfirmModal(true)
   }
 
