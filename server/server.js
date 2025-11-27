@@ -243,6 +243,14 @@ app.patch('/api/users/me', authenticate, async (req, res) => {
   try {
     const updates = req.body;
 
+    // Validate email format if email is being updated
+    if (updates.email && !updates.email.includes('@')) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_EMAIL', message: 'Email phải có định dạng hợp lệ (chứa @)' }
+      });
+    }
+
     // Validate phone format if phone is being updated
     if (updates.phone && !/^\d{10,11}$/.test(updates.phone)) {
       return res.status(400).json({
