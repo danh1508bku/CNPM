@@ -55,6 +55,12 @@ const TutorProfile = () => {
   }
 
   const validateProfile = () => {
+    // Email validation
+    if (formData.email && !formData.email.includes('@')) {
+      toast.error('Email phải có định dạng hợp lệ (chứa @)')
+      return false
+    }
+
     // Phone validation
     if (formData.phone && !/^\d{10,11}$/.test(formData.phone)) {
       toast.error('Số điện thoại phải là dãy 10-11 chữ số')
